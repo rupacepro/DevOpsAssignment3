@@ -11,5 +11,8 @@ push the tagged image to Docker Hub.
 
 
 
-  after push,
+  after GitHub push,
+  run 
+  docker pull rupacepro/webserver-project:latest
+  docker run --rm -d -p 8080:8080 --name webserver-project rupacepro/webserver-project:latest
   
