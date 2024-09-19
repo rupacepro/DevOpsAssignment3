@@ -34,4 +34,9 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Push Docker image to Docker Hub
-        run: docker push your-username/webserver-project
+        run: docker push rupacepro/webserver-project
+
+      - name: Deploy Docker container
+        run: |
+          docker pull rupacepro/webserver-project
+          docker run -d -p 8080:8080 rupacepro/webserver-project
