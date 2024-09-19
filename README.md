@@ -8,4 +8,3 @@ push the tagged image to Docker Hub.
   docker login
   docker tag webserver-project your-username/webserver-project
   docker push your-username/webserver-project
-
