@@ -1,35 +1,32 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
+const app = express();
 const port = 8080;
 const directory = __dirname; // Serve files from the current directory
+app.use(express.static(directory));
 
-const server = http.createServer((req, res) => {
-    // Construct the file path
+app.get('*', (req, res) => {
     let filePath = path.join(directory, req.url === '/' ? 'index.html' : req.url);
 
-    // Check if the file exists
-    fs.stat(filePath, (err, stats) => {
-        if (err || !stats.isFile()) {
-            // File not found
-            res.writeHead(404, { 'Content-Type': 'text/html' });
-            res.end('<html><body><h1 style="color:red;">The page you requested is not available</h1></body></html>');
-        } else {
-            // Serve the file
-            fs.readFile(filePath, (err, data) => {
-                if (err) {
-                    res.writeHead(500, { 'Content-Type': 'text/html' });
-                    res.end('<html><body><h1 style="color:red;">Internal Server Error</h1></body></html>');
-                } else {
-                    res.writeHead(200, { 'Content-Type': 'text/html' });
-                    res.end(data);
-                }
-            });
+    fs.stat(filePath, (err, stats) =>{
+        if(err || !stats.isFile()){
+            res.status(404).send('<html><body><h1 style="color:red;">The page you requested is not available</h1></body></html>');
         }
-    });
+        else{
+            fs.readFile(filePath, (err, data) =>{
+                if(err){
+                    res.status(500).send('<html><body><h1 style="color:red;">Internal Server Error</h1></body></html>');
+                }
+                else{
+                    res.status(200).send(data);
+                }
+            })
+        }
+    })
 });
 
-server.listen(port, () => {
+app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);
 });
