@@ -39,6 +39,4 @@ jobs:
       - name: Deploy Docker container
         run: |
           docker pull rupacepro/webserver-project:latest
-          docker stop webserver-project || true
-          docker rm webserver-project || true
           docker run -d --name webserver-project -p 8080:8080 rupacepro/webserver-project:latest
